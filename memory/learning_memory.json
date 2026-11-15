@@ -1,0 +1,15 @@
+{
+    "total_failed_evaluations": 4,
+    "criteria": {
+        "practical_examples": {
+            "failure_count": 4,
+            "recent_reasons": [
+                "The lesson needs a clearer real-world example.",
+                "The lesson needs a clearer real-world example.",
+                "The lesson needs a clearer real-world example.",
+                "The lesson needs a clearer real-world example."
+            ],
+            "improvement_rule": "Include at least one clear, realistic example and explain how it connects to the topic."
+        }
+    }
+}
