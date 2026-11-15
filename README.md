@@ -144,6 +144,7 @@ self-evaluating-lesson-generator/
 │   ├── main.py
 │   ├── graph.py
 │   ├── state.py
+│   ├── llm.py
 │   │
 │   ├── nodes/
 │   │   ├── generator.py
@@ -177,25 +178,25 @@ self-evaluating-lesson-generator/
 ### Prerequisites
 
 - Python 3.10 or later.
-- An API key for the configured LLM provider.
+- A Groq API key.
 - Git.
 
 ### 1. Clone the Repository
 
 ```bash
-git clone <your-github-repository-url>
+git clone <github-repository-url>
 cd self-evaluating-lesson-generator
 ```
 
 ### 2. Create a Virtual Environment
 
-Windows:
+For Windows:
 
 ```powershell
 python -m venv venv
 ```
 
-Activate it:
+Activate the virtual environment:
 
 ```powershell
 .\venv\Scripts\Activate.ps1
@@ -209,59 +210,66 @@ pip install -r requirements.txt
 
 ### 4. Configure Environment Variables
 
-Create a `.env` file in the project root.
+Create a `.env` file in the root directory of the project.
 
-Add the API key and model configuration required by your LLM implementation.
-
-Example:
+Add the following environment variables:
 
 ```env
-GOOGLE_API_KEY=your_api_key_here
+GROQ_API_KEY=your_groq_api_key
+GROQ_MODEL=your_generator_model_name
+GROQ_EVALUATOR_MODEL=your_evaluator_model_name
 ```
 
-Use the actual environment variable names expected by your application. Never commit API keys or secrets to GitHub.
+- `GROQ_API_KEY`: Your Groq API key.
+- `GROQ_MODEL`: The Groq model used for lesson generation.
+- `GROQ_EVALUATOR_MODEL`: The Groq model used for lesson evaluation.
+
+Replace the example values with your actual API key and model names.
+
 
 ### 5. Run the Application
+
+From the project root directory, execute:
 
 ```powershell
 python -m app.main
 ```
 
-The application generates a lesson, evaluates it, performs regeneration if necessary, and saves the results in the `outputs/` directory.
+The application executes the complete lesson generation and evaluation workflow. It generates educational content, evaluates the lesson against predefined criteria, and regenerates the lesson when evaluation requirements are not met.
+
+The generated outputs and evaluation results are saved in the `outputs/` directory.
 
 ## Testing
 
-The project includes tests for the evaluation and retry workflows.
+The project includes tests for evaluating lesson quality and verifying the feedback-driven regeneration workflow.
 
-Run the evaluator test:
+### Run the Evaluator Test
 
 ```powershell
 python -m app.test_evaluator
 ```
 
-This test checks whether the evaluator can identify problems in an intentionally poor-quality lesson.
+This test verifies whether the evaluator identifies problems in an intentionally poor-quality lesson.
 
-Run the retry test:
+### Run the Retry Test
 
 ```powershell
 python -m app.test_retry
 ```
 
-This test verifies that the workflow can reject an initial lesson, pass feedback to the generator, and successfully complete after regeneration.
+This test verifies whether the workflow can reject an initial lesson, provide feedback to the generator, and regenerate improved content.
 
-Run the main application:
+### Run the Complete Application
 
 ```powershell
 python -m app.main
 ```
 
-This tests the complete generation and evaluation workflow.
+This executes the complete lesson generation and self-evaluation workflow.
 
 ## Example Evaluation Result
 
-The application evaluates a lesson using the six predefined criteria.
-
-Example:
+The application evaluates generated lessons using six predefined criteria.
 
 ```text
 Final Status: PASS
@@ -278,14 +286,6 @@ Total Regenerations: 0
 
 If an evaluation fails, the application records the failed criteria and their explanations in the rejection log.
 
-## Future Improvements
-
-- Use an independent evaluator model to reduce shared-model evaluation bias.
-- Add more detailed factual verification using trusted reference materials.
-- Dynamically identify recurring failure patterns and generate new improvement guidelines.
-- Add support for multiple educational topics and difficulty levels.
-- Introduce automated evaluation datasets and regression testing.
-- Improve evaluation consistency using human-reviewed benchmark lessons.
 
 ## Conclusion
 
